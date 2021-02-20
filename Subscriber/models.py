@@ -10,26 +10,26 @@ def next_serial_num():
     last_serial = last_subscriber.serial_num
     return last_serial + 1
 
-# def suggest_serial_num():
-#     serials = Subscriber.objects.values_list('serial_num')
-#     num_of_serials = serials.count()
-#     last_serial = serials.last()[0]
-#     if last_serial == num_of_serials:
-#         return ""
-#     skipped_serials = []
-#     i = 1
-#     while i <= last_serial:
-#         if i != serials[i][0]:
-#             skipped_serials.append(i)
-#             i += 1
-#         i += 1
-#     txt = "Skipped serials are" + skipped_serials
-#     return txt
+def suggest_serial_num():
+    serials = Subscriber.objects.order_by('serial_num').values_list('serial_num')
+    num_of_serials = serials.count()
+    last_serial = serials.last()[0]
+    if last_serial == num_of_serials:
+        return ""
+    skipped_serials = list(range(1,int(last_serial)))
+    i = 0
+    while i < num_of_serials:
+        current_serial = serials[i][0]
+        if current_serial in skipped_serials:
+            skipped_serials.remove(current_serial)
+        i += 1
+    txt = "Skipped serials are " + str(skipped_serials)
+    return txt
 
 
 class Subscriber(models.Model):
     active                  = models.BooleanField(default=True, verbose_name="Active Subscriber")
-    serial_num              = models.DecimalField(max_digits=4, decimal_places=0, unique=True, default=next_serial_num)
+    serial_num              = models.DecimalField(max_digits=4, decimal_places=0, unique=True, default=next_serial_num, help_text=suggest_serial_num)
     name                    = models.CharField(verbose_name="Full Name", max_length=255)
     date_of_birth           = models.DateField(blank=True, null=True)
     gender                  = models.CharField(max_length=6, choices=gender_choices, default='Male')
