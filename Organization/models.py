@@ -3,7 +3,7 @@ from django.utils import timezone
 import datetime
 
 from Subscriber.models import Subscriber
-from .choices import revenue_type_choices
+from .choices import revenue_type_choices, sources
 
 class SubscriptionFee(models.Model):
     date = models.DateField(default=timezone.now)
@@ -31,3 +31,13 @@ class Revenue(models.Model):
 
     def __str__(self):
         return self.description + " (" + str(self.amount) + ")"
+
+class Expense(models.Model):
+    date = models.DateField(default=timezone.now)
+    source = models.CharField(max_length=10, choices=sources)
+    voucher_no = models.CharField(max_length=10)
+    description = models.TextField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.source + " - " + self.description + " (" + str(self.amount) + ")"

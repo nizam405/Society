@@ -2,7 +2,7 @@ sources = [
     ('Mosque','Mosque'),
     ('Graveyeard','Graveyeard'),
     ('Eidgah','Eidgah'),
-    ('Mustichal','Mustichal'),
+    # ('Mustichal','Mustichal'),
     ('Tarabih','Tarabih')
 ]
 
