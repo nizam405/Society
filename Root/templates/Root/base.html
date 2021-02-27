@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' type='text/css' href="{% static 'Root/bootstrap/css/bootstrap.min.css' %}">
+    <link rel='stylesheet' href="{% static 'Root/fontawesome-free-5.3.1-web/all.min.css' %}">
+    <title>{% block title %}2 No. Madhab Pasha Boro Jame Maszid{% endblock title %}</title>
+</head>
+<body>
+<div class='container my-2'>
+    {% include 'Root/navigation.html' %}
+</div>
+<div class='container'>
+    {% block content %}
+    {% endblock content %}
+</div>
+
+<script src="{% static 'Root/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'Root/jquery-3.5.0.min.js' %}"></script>
+<script src="{% static 'Root/popper.min.js' %}"></script>
+<script src="{% static 'Root/fontawesome-free-5.3.1-web/all.min.js' %}"></script>
+
+</body>
+</html>

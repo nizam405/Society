@@ -1,0 +1,75 @@
+{% extends 'Root/base.html' %} {% block content %}
+
+<h2>{{subscriber.name}}</h2>
+<div>Active member: 
+  {% if subscriber.active %}
+    <i class="fas fa-check text-success"></i>
+  {% else %}
+    <i class="fas fa-times text-warning"></i>
+  {% endif%}
+</div>
+
+<table class="table">
+  <tr>
+    <td>Serial Number</td>
+    <td>{{subscriber.serial_num }}</td>
+  </tr>
+  <tr>
+    <td>Full Name</td>
+    <td>{{subscriber.name }}</td>
+  </tr>
+  <tr>
+    <td>Date of birth</td>
+    <td>{{subscriber.date_of_birth }}</td>
+  </tr>
+  <tr>
+    <td>Gender</td>
+    <td>{{subscriber.gender }}</td>
+  </tr>
+  <tr>
+    <td>Number of family members</td>
+    <td>{{subscriber.num_of_family_member }}</td>
+  </tr>
+  <tr>
+    <td>Gurdian ({{subscriber.gurdian_type }})</td>
+    <td>{{subscriber.gurdian_name }}</td>
+  </tr>
+  <tr>
+    <td>Identity</td>
+    <td>{{subscriber.identity }}</td>
+  </tr>
+  <tr>
+    <td>Present Address</td>
+    <td>{{subscriber.present_address }}</td>
+  </tr>
+  <tr>
+    <td>Permanent Address</td>
+    <td>{{subscriber.permanent_address }}</td>
+  </tr>
+  <tr>
+    <td>Phone</td>
+    <td>{{subscriber.phone }}</td>
+  </tr>
+  <tr>
+    <td>National Identity Number</td>
+    <td>{{subscriber.nid_num }}</td>
+  </tr>
+  <tr>
+    <td>Birth Certificate Number</td>
+    <td>{{subscriber.birth_certificate_num }}</td>
+  </tr>
+  <tr>
+    <td>Blood Group</td>
+    <td>{{subscriber.blood_group }}</td>
+  </tr>
+  <tr>
+    <td>Marital Status</td>
+    <td>{{subscriber.marital_status }}</td>
+  </tr>
+  <tr>
+    <td>Subscription Date</td>
+    <td>{{subscriber.subscription_date }}</td>
+  </tr>
+</table>
+
+{% endblock content %}

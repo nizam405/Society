@@ -1,0 +1,59 @@
+{% extends 'Root/base.html' %}
+{% block content %}
+
+<h2>Subscription Fees</h2>
+<div class="d-flex mb-3">
+    <div class="mr-5">Total {{fees.count}} entries</div>
+    <div>
+        <form class="form-inline" action="" method="get">
+            {% csrf_token %}
+            <label for="year" class="mr-2">Year:</label>
+            <input type="text" name="year" value="{{year}}" id="year" class="form-control mr-2 form-control-sm">
+            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ক্রমিক নং</th> 
+            <th>নাম</th> 
+            <th>হিসাব কাল</th> 
+            <th>মসজিদ</th>  
+            <th>কবরস্থান</th>  
+            <th>ঈদ্গাহ</th>  
+            <th>মুষ্টি চাল</th>  
+            <th>তারাবীহ</th>  
+            <th>বকেয়া</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fees in fees %}
+            <tr>
+                <td>{{fees.subscriber.serial_num}}</td> 
+                <td>{{fees.subscriber.name}}</td> 
+                <td>{{fees.year}}</td> 
+                <td>{{fees.mosque|default:"0"}}</td> 
+                <td>{{fees.graveyeard|default:"0"}}</td> 
+                <td>{{fees.eidgah|default:"0"}}</td> 
+                <td>{{fees.mustichal|default:"0"}}</td> 
+                <td>{{fees.tarabih|default:"0"}}</td> 
+                <td></td> 
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3">Sum:</th>
+            <th>{{ sum_of_fees.mosque|default:"0" }}</th>
+            <th>{{ sum_of_fees.graveyeard|default:"0" }}</th>
+            <th>{{ sum_of_fees.eidgah|default:"0" }}</th>
+            <th>{{ sum_of_fees.mustichal|default:"0" }}</th>
+            <th>{{ sum_of_fees.tarabih|default:"0" }}</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+<div class="font-weight-bold">Grand Total: {{ grand_total|default:"0" }}</div>
+
+{% endblock content %}

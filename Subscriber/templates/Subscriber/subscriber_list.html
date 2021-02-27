@@ -1,0 +1,19 @@
+{% extends 'Root/base.html' %}
+{% block content %}
+
+<h2>All Subscribers</h2>
+<table class="table">
+    <tr>
+        <th>S/L</th> <th>Name</th> <th>Gurdian's Name</th> <th>Phone</th> 
+    </tr>
+    {% for subscriber in subscribers %}
+        <tr>
+            <td>{{subscriber.serial_num}}</td> 
+            <td><a href={% url 'show_subscriber' subscriber.id %}>{{subscriber.name}}</a></td> 
+            <td>{{subscriber.gurdian_name}}</td> 
+            <td>{{subscriber.phone}}</td> 
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
