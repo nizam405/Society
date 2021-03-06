@@ -24,6 +24,7 @@
             <th>ঈদ্গাহ</th>  
             <th>মুষ্টি চাল</th>  
             <th>তারাবীহ</th>  
+            <th>মোট</th>
             <th>বকেয়া</th>
         </tr>
     </thead>
@@ -38,6 +39,7 @@
                 <td>{{fees.eidgah|default:"0"}}</td> 
                 <td>{{fees.mustichal|default:"0"}}</td> 
                 <td>{{fees.tarabih|default:"0"}}</td> 
+                <td class="font-weight-bold">{{fees.sum}}</td> 
                 <td></td> 
             </tr>
         {% endfor %}

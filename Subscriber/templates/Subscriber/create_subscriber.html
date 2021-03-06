@@ -1,0 +1,14 @@
+{% extends "Root/base.html" %}
+
+{% block content %}
+{% load bootstrap4 %}
+<h2>Add New Subscriber</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+</form>
+  
+{% endblock content %}

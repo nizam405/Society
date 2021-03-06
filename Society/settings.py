@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'Root',
     'Subscriber',
     'Organization',
-    'rest_framework',
-    'rest_framework.authtoken'
+    "bootstrap4",
+    # 'rest_framework',
+    # 'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [

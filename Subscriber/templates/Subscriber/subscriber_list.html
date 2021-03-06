@@ -2,6 +2,7 @@
 {% block content %}
 
 <h2>All Subscribers</h2>
+<div><a href="{% url 'create_subscriber' %}">Add</a></div>
 <table class="table">
     <tr>
         <th>S/L</th> <th>Name</th> <th>Gurdian's Name</th> <th>Phone</th> 
@@ -9,7 +10,7 @@
     {% for subscriber in subscribers %}
         <tr>
             <td>{{subscriber.serial_num}}</td> 
-            <td><a href={% url 'show_subscriber' subscriber.id %}>{{subscriber.name}}</a></td> 
+            <td><a href="{% url 'show_subscriber' subscriber.id %}">{{subscriber.name}}</a></td> 
             <td>{{subscriber.gurdian_name}}</td> 
             <td>{{subscriber.phone}}</td> 
         </tr>

@@ -2,22 +2,37 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
-from Subscriber.models import Subscriber
+from Subscriber.models import Subscriber, DefaultFees
 from .choices import revenue_type_choices, sources
 
-class SubscriptionFee(models.Model):
-    date        = models.DateField(default=timezone.now)
-    subscriber  = models.ForeignKey(to=Subscriber, on_delete=models.CASCADE)
-    year        = models.CharField(max_length=4, default=datetime.datetime.today().year, verbose_name="হিসাব কাল")
-    mosque      = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="মসজিদ")
-    graveyeard  = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="কবরস্থান")
-    eidgah      = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="ঈদ্গাহ")
-    mustichal   = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="মুষ্টি চাল")
-    tarabih     = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="তারাবীহ")
+class SubscriptionFee(DefaultFees):
+    date                    = models.DateField(default=timezone.now)
+    subscriber              = models.ForeignKey(to=Subscriber, on_delete=models.CASCADE)
+    year                    = models.CharField("হিসাব কাল", max_length=4, default=datetime.datetime.today().year)
+    
+    mosque_recovered        = models.DecimalField("আদায়কৃত মসজিদের বেতন", max_digits=10, decimal_places=0, blank=True, null=True)
+    graveyeard_recovered    = models.DecimalField("আদায়কৃত কবরস্থানের বেতন", max_digits=10, decimal_places=0, blank=True, null=True)
+    eidgah_recovered        = models.DecimalField("আদায়কৃত ঈদ্গাহের বেতন", max_digits=10, decimal_places=0, blank=True, null=True)
+    mustichal_recovered     = models.DecimalField("আদায়কৃত মুষ্টি চালের টাকা", max_digits=10, decimal_places=0, blank=True, null=True)
+    tarabih_recovered       = models.DecimalField("আদায়কৃত তারাবীর টাকা", max_digits=10, decimal_places=0, blank=True, null=True)
 
     class Meta:
         unique_together = ('subscriber','year')
         ordering = ('year',)
+    
+    def sum(self):
+        total = 0
+        if self.mosque_recovered != None:
+            total += self.mosque_recovered 
+        if self.graveyeard_recovered != None:
+            total += self.graveyeard_recovered 
+        if self.eidgah_recovered != None:
+            total += self.eidgah_recovered 
+        if self.mustichal_recovered != None:
+            total += self.mustichal_recovered 
+        if self.tarabih_recovered != None:
+            total += self.tarabih_recovered 
+        return total
 
     def __str__(self):
         return str(self.subscriber.serial_num) + " - " + self.subscriber.name + " (" + self.year + ")"
