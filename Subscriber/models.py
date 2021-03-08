@@ -22,8 +22,9 @@ def suggest_serial_num():
     serials = Subscriber.objects.order_by('serial_num').values_list('serial_num')
     num_of_serials = serials.count()
     last_serial = serials.last()[0]
+    txt = ""
     if last_serial == num_of_serials:
-        return ""
+        return txt
     skipped_serials = list(range(1,int(last_serial)))
     i = 0
     while i < num_of_serials:
@@ -36,55 +37,33 @@ def suggest_serial_num():
 
 
 class Subscriber(DefaultFees):
-    MALE = 'M'
-    FEMALE = 'F'
-    GENDER_CHOICES = [
-        (MALE,'Male'),
-        (FEMALE,'Female')
-    ]
-
-    FATHER = 'FATHER'
-    SPOUSE = 'SPOUSE'
-    GURDIAN_TYPE_CHOICES = [
-        (FATHER,'Father'),
-        (SPOUSE,'Spouse')
-    ]
-
-    BLOOD_GROUP_CHOICES = [
-        ('N/A','N/A'),
-        ('A+','A+'),
-        ('A-','A-'),
-        ('B+','B+'),
-        ('B-','B-'),
-        ('O+','O+'),
-        ('O-','O-'),
-        ('AB+','AB+'),
-        ('AB-','AB-'),
-    ]
-
-    MARRIED = 'MARRIED'
-    UNMARRIED = 'UNMARRIED'
-    MARRITAL_STATUS_CHOICES = [
-        (MARRIED,'Married'),
-        (UNMARRIED,'Unmarried')
-    ]
-
-    active                  = models.BooleanField(default=True, verbose_name="Active Subscriber")
-    serial_num              = models.DecimalField(max_digits=4, decimal_places=0, unique=True, default=next_serial_num, help_text=suggest_serial_num)
-    name                    = models.CharField(verbose_name="Full Name", max_length=255)
+    # Field Choices ---------------------------------------------------------------------------------------------
+    GENDER          = models.TextChoices('gender', 'MALE FEMALE')
+    GURDIAN_TYPE    = models.TextChoices('gurdian_type', 'FATHER SPOUSE')
+    BLOOD_GROUP     = models.TextChoices('blood_gorup', 'A+ A- B+ B- O+ O- AB+ AB-')
+    MARRITAL_STATUS = models.TextChoices('marital_status', 'MARRIED UNMARRIED')
+    # Fields ----------------------------------------------------------------------------------------------------
+    active                  = models.BooleanField("Active Subscriber", default=True)
+    serial_num              = models.DecimalField(max_digits=4, decimal_places=0, unique=True, 
+                            default=next_serial_num, help_text=suggest_serial_num)
+    name                    = models.CharField("Full Name", max_length=255)
     date_of_birth           = models.DateField(blank=True, null=True)
-    gender                  = models.CharField(max_length=6, choices=GENDER_CHOICES, default=MALE)
-    num_of_family_member    = models.DecimalField(max_digits=2, decimal_places=0, help_text="You, your spouse and children if they haven't subscribed")
-    gurdian_type            = models.CharField(max_length=6, choices=GURDIAN_TYPE_CHOICES, default=FATHER)
+    gender                  = models.CharField(max_length=6, choices=GENDER.choices, default='MALE')
+    num_of_family_member    = models.DecimalField(max_digits=2, decimal_places=0, 
+                            help_text="You, your spouse and children if they haven't subscribed")
+    gurdian_type            = models.CharField(max_length=6, choices=GURDIAN_TYPE.choices, default='FATHER')
     gurdian_name            = models.CharField(max_length=255)
-    identity                = models.TextField(blank=True, null=True, help_text="Relative, Clan or House")
     present_address         = models.TextField()
     permanent_address       = models.TextField()
-    phone                   = models.CharField(max_length=11)
-    nid_num                 = models.CharField(max_length=17, verbose_name="National Identity Number", blank=True, null=True)
-    birth_certificate_num   = models.CharField(max_length=17, verbose_name="Birth Certificate Number", blank=True, null=True)
-    blood_group             = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES, default='N/A')
-    marital_status          = models.CharField(max_length=9, choices=MARRITAL_STATUS_CHOICES, default=MARRIED)
+    additional_info         = models.TextField("Additional information", blank=True, null=True, 
+                            help_text="Relative, Clan or House")
+    phone                   = models.CharField(max_length=11, help_text='Phone number must be in 11 digit')
+    nid_num                 = models.CharField("National Identity Number", max_length=17, blank=True, null=True,
+                            help_text="National Identity Number must be in 17 digit")
+    birth_certificate_num   = models.CharField("Birth Certificate Number", max_length=17, blank=True, null=True,
+                            help_text="Instead of NID enter Birth Certificate Number. It must be in 17 digit")
+    blood_group             = models.CharField(max_length=3, choices=BLOOD_GROUP.choices, default="", blank=True)
+    marital_status          = models.CharField(max_length=9, choices=MARRITAL_STATUS.choices, default='MARRIED')
     subscription_date       = models.DateField(default=timezone.now)
 
     class Meta:

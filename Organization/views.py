@@ -2,9 +2,31 @@ import datetime
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import SubscriptionFee, Revenue, Expense
+from Subscriber.models import Subscriber
 
 # Create your views here.
 def SubscriptionFees(request):
+    subscribers = Subscriber.objects.all()
+    # fees = SubscriptionFee.objects.all()
+    for subscriber in subscribers:
+        if subscriber.active == True:
+            sub_year = subscriber.subscription_date.year
+            current_year = datetime.datetime.now().year
+
+            for year in range(sub_year,current_year+2):
+                fee, created = SubscriptionFee.objects.get_or_create(
+                    subscriber=subscriber, 
+                    year=year,
+                    defaults={
+                            'mosque_recoverable': subscriber.mosque_recoverable,
+                            'graveyeard_recoverable':subscriber.graveyeard_recoverable,
+                            'eidgah_recoverable':subscriber.eidgah_recoverable,
+                            'mustichal_recoverable':subscriber.mustichal_recoverable,
+                            'tarabih_recoverable':subscriber.tarabih_recoverable
+                        }
+                    )
+                
+                
     year = str(datetime.datetime.today().year)
     if 'year' in request.GET:
         year = request.GET['year']
