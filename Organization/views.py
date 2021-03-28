@@ -6,14 +6,14 @@ from Subscriber.models import Subscriber
 
 # Create your views here.
 def SubscriptionFees(request):
+    # First ensure fees list of all active members till current year is created
     subscribers = Subscriber.objects.all()
-    # fees = SubscriptionFee.objects.all()
     for subscriber in subscribers:
         if subscriber.active == True:
             sub_year = subscriber.subscription_date.year
             current_year = datetime.datetime.now().year
-
-            for year in range(sub_year,current_year+2):
+            # Create list for each year from subscription year to current year
+            for year in range(sub_year,current_year+1):
                 fee, created = SubscriptionFee.objects.get_or_create(
                     subscriber=subscriber, 
                     year=year,
@@ -26,18 +26,32 @@ def SubscriptionFees(request):
                         }
                     )
                 
-                
     year = str(datetime.datetime.today().year)
     if 'year' in request.GET:
-        year = request.GET['year']
-    fees = SubscriptionFee.objects.filter(year=year)
-    sum_of_fees = {
-        'mosque'        : fees.aggregate(Sum('mosque_recovered'))['mosque_recovered__sum'],
-        'graveyeard'    : fees.aggregate(Sum('graveyeard_recovered'))['graveyeard_recovered__sum'],
-        'eidgah'        : fees.aggregate(Sum('eidgah_recovered'))['eidgah_recovered__sum'],
-        'mustichal'     : fees.aggregate(Sum('mustichal_recovered'))['mustichal_recovered__sum'],
-        'tarabih'       : fees.aggregate(Sum('tarabih_recovered'))['tarabih_recovered__sum'],
-    }
+        if request.GET['year'] != "":
+            year = request.GET['year']
+            fees = SubscriptionFee.objects.filter(year=year)
+        else:
+            year = ""
+            fees = SubscriptionFee.objects.all()
+    else:
+        fees = SubscriptionFee.objects.filter(year=year)
+
+    sum_of_fees = fees.aggregate(
+        mosque = Sum('mosque_recovered'),
+        graveyeard = Sum('graveyeard_recovered'),
+        eidgah = Sum('eidgah_recovered'),
+        mustichal = Sum('mustichal_recovered'),
+        tarabih = Sum('tarabih_recovered')
+    )
+    # sum_of_recoverable = fees.aggregate(
+    #     mosque_r = Sum('mosque_recoverable'),
+    #     graveyeard_r = Sum('graveyeard_recoverable'),
+    #     eidgah_r = Sum('eidgah_recoverable'),
+    #     mustichal_r = Sum('mustichal_recoverable'),
+    #     tarabih_r = Sum('tarabih_recoverable')
+    # )
+    # sum_of_fees returns a dictionary
     grand_total = 0
     for key, value in sum_of_fees.items():
         if value is not None:

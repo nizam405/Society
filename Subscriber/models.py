@@ -67,7 +67,7 @@ class Subscriber(DefaultFees):
     subscription_date       = models.DateField(default=timezone.now)
 
     class Meta:
-        ordering = ('serial_num',)
+        ordering = ['serial_num']
 
     def __str__(self):
         return str(self.serial_num) + " " + self.name

@@ -18,7 +18,7 @@ class SubscriptionFee(DefaultFees):
 
     class Meta:
         unique_together = ('subscriber','year')
-        ordering = ('year',)
+        ordering = ('subscriber__serial_num',)
     
     def sum(self):
         total = 0
@@ -33,6 +33,24 @@ class SubscriptionFee(DefaultFees):
         if self.tarabih_recovered != None:
             total += self.tarabih_recovered 
         return total
+    
+    def default_fees(self):
+        total = 0
+        if datetime.date.today() >= datetime.date(datetime.datetime.now().year,6,1):
+            if self.mosque_recoverable != None:
+                total += self.mosque_recoverable 
+            if self.graveyeard_recoverable != None:
+                total += self.graveyeard_recoverable 
+        if self.eidgah_recoverable != None:
+            total += self.eidgah_recoverable 
+        if self.mustichal_recoverable != None:
+            total += self.mustichal_recoverable 
+        if self.tarabih_recoverable != None:
+            total += self.tarabih_recoverable 
+        return total
+    
+    def due(self):
+        return int(self.default_fees()) - int(self.sum())
 
     def __str__(self):
         return str(self.subscriber.serial_num) + " - " + self.subscriber.name + " (" + self.year + ")"
